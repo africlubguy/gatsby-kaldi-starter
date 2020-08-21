@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
 
-export const PageTemplate = ({ title, content }) => {
+export const PageTemplate = ({ title, image, content }) => {
   return (
     <section className="section section--gradient">
       <div className="container">
@@ -13,6 +13,7 @@ export const PageTemplate = ({ title, content }) => {
               <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
                 {title}
               </h2>
+			  <img src={image.localFile.childImageSharp.fluid.src} alt={image.alt_text} />
               <div
                 className="content"
                 dangerouslySetInnerHTML={{ __html: content }}
@@ -26,6 +27,7 @@ export const PageTemplate = ({ title, content }) => {
 }
 
 PageTemplate.propTypes = {
+  image: PropTypes.string,
   title: PropTypes.string.isRequired,
   content: PropTypes.string,
 }
@@ -35,7 +37,7 @@ const Page = ({ data }) => {
 
   return (
     <Layout>
-      <PageTemplate title={page.title} content={page.content} />
+      <PageTemplate title={page.title} image={page.featured_media} content={page.content} />
     </Layout>
   )
 }
@@ -49,7 +51,17 @@ export default Page
 export const pageQuery = graphql`
   query PageById($id: String!) {
     wordpressPage(id: { eq: $id }) {
-      title
+      title   
+      featured_media {
+        alt_text
+        localFile {
+          childImageSharp {
+              fluid(maxWidth: 1333) {
+                src
+              }
+          }
+        }
+      }
       content
     }
   }

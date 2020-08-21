@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'Gatsby + WordPress Starter',
+    title: 'Sals ////Gatsby + WordPress////',
   },
   plugins: [
     'gatsby-plugin-react-helmet',
@@ -9,13 +9,38 @@ module.exports = {
       resolve: 'gatsby-source-wordpress',
       options: {
         // The base url to your WP site.
-        baseUrl: 'wpdemo.gatsbycentral.com',
+        baseUrl: 'admin.sal.kitololo.com',
         // WP.com sites set to true, WP.org set to false
         hostingWPCOM: false,
         // The protocol. This can be http or https.
-        protocol: 'https',
+        protocol: 'http',
         // Use 'Advanced Custom Fields' Wordpress plugin
         useACF: false,
+        acfOptionPageIds: [],
+        verboseOutput: false,
+        perPage: 100,
+        searchAndReplaceContentUrls: {
+          sourceUrl: "http://admin.sal.kitololo.com",
+          replacementUrl: "https://sal.kitololo.com",
+        },
+        // Set how many simultaneous requests are sent at once.
+        concurrentRequests: 10,
+        includedRoutes: [
+          "**/categories",
+          "**/posts",
+          "**/pages",
+          "**/media",
+          "**/tags",
+          "**/taxonomies",
+          "**/users",
+          "**/*/*/menus", // <== Menu api endpoint
+          "wp-json/wp-api-menus/v2/menus/",
+          "**/*/*/menu-locations", // <== Menu api endpoint
+        ],
+        excludedRoutes: [],
+        normalizer: function({ entities }) {
+          return entities
+        },
         auth: {},
         // Set to true to debug endpoints on 'gatsby build'
         verboseOutput: false,
@@ -33,6 +58,5 @@ module.exports = {
         purgeOnly: ['/all.sass'],
       },
     }, // must be after other CSS plugins
-    'gatsby-plugin-netlify', // make sure to keep it last in the array
   ],
 }
