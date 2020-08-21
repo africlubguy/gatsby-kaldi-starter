@@ -12,15 +12,21 @@ export default class IndexPage extends React.Component {
           <div className="content">
             <h1 className="has-text-weight-bold is-size-2">{title}</h1>
           </div>
-          {posts.map(({ node: post }) => (
+		   <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', width: '100%' }}>
+           {posts.map(({ node: post }) => (
+   
             <div
               className="content"
-              style={{ border: '1px solid #eaecee', padding: '2em 4em' }}
+              style={{ border: '1px solid #eaecee', padding: '2em 4em', width: '45%' }}
               key={post.id}
             >
               <p>
                 <Link className="has-text-primary" to={post.slug}>
-                  {post.title}
+                  <img 
+					src={post.featured_media.localFile.childImageSharp.fluid.src} 
+					alt={post.featured_media.alt_text}
+				  />
+                  {post.title}  
                 </Link>
                 <span> &bull; </span>
                 <small>
@@ -42,6 +48,7 @@ export default class IndexPage extends React.Component {
               </div>
             </div>
           ))}
+		 </div>
         </div>
       </section>
     )
@@ -57,8 +64,19 @@ export const pageQuery = graphql`
   fragment PostListFields on wordpress__POST {
     id
     title
-    excerpt
+    excerpt    
+      featured_media {
+        alt_text
+        localFile {
+          childImageSharp {
+              fluid(maxWidth: 1333) {
+              src
+            }
+          }
+        }
+      }
     author {
+      id
       name
       slug
       avatar_urls {

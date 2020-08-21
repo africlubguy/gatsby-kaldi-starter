@@ -9,6 +9,7 @@ export const BlogPostTemplate = ({
   categories,
   tags,
   title,
+  image,
   date,
   author,
 }) => {
@@ -20,6 +21,10 @@ export const BlogPostTemplate = ({
             <h1 className="title is-size-2 has-text-weight-bold is-bold-light">
               {title}
             </h1>
+            <img 
+			  src={image.localFile.childImageSharp.fluid.src} 
+			  alt={image.alt_text}
+		    />
             <div dangerouslySetInnerHTML={{ __html: content }} />
             <div style={{ marginTop: `4rem` }}>
               <p>
@@ -70,12 +75,13 @@ const BlogPost = ({ data }) => {
 
   return (
     <Layout>
-      <Helmet title={`${post.title} | Blog`} />
+      <Helmet title={`${post.title} | Sals Jung & Sci-fi Blog`} />
       <BlogPostTemplate
         content={post.content}
         categories={post.categories}
         tags={post.tags}
         title={post.title}
+		image={post.featured_media}
         date={post.date}
         author={post.author}
       />
@@ -103,7 +109,17 @@ export const pageQuery = graphql`
     wordpressPost(id: { eq: $id }) {
       id
       title
-      slug
+      slug    
+      featured_media {
+        alt_text
+        localFile {
+          childImageSharp {
+              fluid(maxWidth: 1333) {
+              src
+            }
+          }
+        }
+      }
       content
       date(formatString: "MMMM DD, YYYY")
       categories {
